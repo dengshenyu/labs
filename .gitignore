@@ -1,0 +1,17 @@
+target/
+.classpath
+.project
+.settings/
+.springBeans
+.metadata/
+*.ipr
+*.iws
+*.iml
+.idea/
+*.swp
+*.swo
+*.swn
+src/test/test.iml
+*.DS_Store
+logs/
+tmp/
