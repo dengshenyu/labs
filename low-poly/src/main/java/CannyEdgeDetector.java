@@ -439,7 +439,8 @@ public class CannyEdgeDetector {
     //with one which only loosely approximates the hypot function. I've tested
     //simple approximations such as Math.abs(x) + Math.abs(y) and they work fine.
     private float hypot(float x, float y) {
-        return (float) Math.hypot(x, y);
+        //return (float) Math.hypot(x, y);
+        return Math.abs(x) + Math.abs(y);
     }
 
     private float gaussian(float x, float sigma) {
