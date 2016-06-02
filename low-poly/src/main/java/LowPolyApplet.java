@@ -36,8 +36,7 @@ public class LowPolyApplet extends JApplet {
     // Applet init function
     public void init() {
         try {
-            URL url = getClass().getClassLoader().getResource("lowpoly.jpg");
-            sourceImage = ImageIO.read(new File(url.getFile()));
+            sourceImage = ImageIO.read(getClass().getResourceAsStream("/lowpoly.jpg"));
             //sourceImage = sourceImage.getScaledInstance(500, 500, Image.SCALE_SMOOTH);
             width = sourceImage.getWidth(null);
             height = sourceImage.getHeight(null);
