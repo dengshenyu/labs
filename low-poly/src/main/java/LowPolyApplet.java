@@ -16,8 +16,10 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * This
- * Created by shenyuan on 16/5/27.
+ * This applet is used for generating low-poly images.
+ * Enjoy yourself and feel free to contact me if you have any suggestion :).
+ *
+ * @author Deng Shenyuan
  */
 public class LowPolyApplet extends JApplet {
 
@@ -36,7 +38,7 @@ public class LowPolyApplet extends JApplet {
     // Applet init function
     public void init() {
         try {
-            sourceImage = ImageIO.read(getClass().getResourceAsStream("/lowpoly.jpg"));
+            sourceImage = ImageIO.read(getClass().getResourceAsStream("/source.jpg"));
             //sourceImage = sourceImage.getScaledInstance(500, 500, Image.SCALE_SMOOTH);
             width = sourceImage.getWidth(null);
             height = sourceImage.getHeight(null);
