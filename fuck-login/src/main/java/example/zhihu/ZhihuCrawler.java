@@ -30,6 +30,7 @@ public class ZhihuCrawler {
     private ZhihuLogin zhihuLogin;
     private HttpContext httpContext;
     private Map<String, String> headers;
+    private String account, password;
     public String myUrlToken;
     private double permitsPerSec = 3;
 
@@ -40,8 +41,8 @@ public class ZhihuCrawler {
 
         //2.使用resources下的zhihu.sql创建answer表和article表, 以存放抓取数据
         //3.修改Config.mysqlUrl, Config.mysqlUser和Config.mysqlPassword, 以连接数据库
-        ZhihuAnswerDao answerDao = new ZhihuAnswerDao();
-        ZhihuArticleDao articleDao = new ZhihuArticleDao();
+        ZhihuAnswerDao answerDao = new ZhihuAnswerDao(Config.mysqlUrl, Config.mysqlUser, Config.mysqlPassword);
+        ZhihuArticleDao articleDao = new ZhihuArticleDao(Config.mysqlUrl, Config.mysqlUser, Config.mysqlPassword);
 
         if (crawler.login()) {
             List<String> followees = crawler.crawlFollowee(crawler.getMyUrlToken());
@@ -81,10 +82,12 @@ public class ZhihuCrawler {
         headers.put("User-Agent", "Mozilla/5.0 (Windows NT 5.1; rv:33.0) Gecko/20100101 Firefox/33.0");
 
         zhihuLogin = new ZhihuLogin(httpContext, this.headers);
+        this.account = account;
+        this.password = password;
     }
 
     public boolean login() {
-        boolean result = zhihuLogin.login(Config.zhihuAccount, Config.zhihuPassword);
+        boolean result = zhihuLogin.login(account, password);
         if (result) {
             try {
                 String profile = zhihuLogin.getProfile();

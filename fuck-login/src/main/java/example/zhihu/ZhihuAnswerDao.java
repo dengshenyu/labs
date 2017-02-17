@@ -11,6 +11,9 @@ import java.sql.Timestamp;
  */
 public class ZhihuAnswerDao extends BaseDao {
 
+    public ZhihuAnswerDao(String url, String user, String password) {
+        super(url, user, password);
+    }
 
     public void save(ZhihuAnswerDO answerDO) {
         Connection conn = getConnection();

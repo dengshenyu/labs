@@ -9,6 +9,10 @@ import java.sql.Timestamp;
  * Created by shenyuan on 17/2/16.
  */
 public class ZhihuArticleDao extends BaseDao {
+    public ZhihuArticleDao(String url, String user, String password) {
+        super(url, user, password);
+    }
+
     public void save(ZhihuArticleDO articleDO) {
         Connection conn = getConnection();
         PreparedStatement stmt = null;
