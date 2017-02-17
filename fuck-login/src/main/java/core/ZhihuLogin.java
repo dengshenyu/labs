@@ -1,3 +1,4 @@
+package core;
 
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.protocol.HttpClientContext;
@@ -5,6 +6,7 @@ import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import util.HttpUtils;
+import util.JsonUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,38 +23,15 @@ import java.util.regex.Pattern;
  * Created by shenyuan on 17/2/13.
  */
 public class ZhihuLogin {
-    private static HttpContext httpContext;
-    private static Map<String, String> headers;
+    private HttpContext httpContext;
+    private Map<String, String> headers;
 
-    static {
-        CookieStore cookieStore = new BasicCookieStore();
-        httpContext = new BasicHttpContext();
-        httpContext.setAttribute(HttpClientContext.COOKIE_STORE, cookieStore);
-
-        headers = new HashMap<String, String>();
-        headers.put("Host", "www.zhihu.com");
-        headers.put("Referer", "https://www.zhihu.com/");
-        headers.put("User-Agent", "Mozilla/5.0 (Windows NT 5.1; rv:33.0) Gecko/20100101 Firefox/33.0");
+    public ZhihuLogin(HttpContext httpContext, Map<String, String> headers) {
+        this.httpContext = httpContext;
+        this.headers = headers;
     }
 
-    public static void main(String[] args) {
-        try {
-            System.out.println("请输入你的用户名: ");
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            String account = br.readLine().trim();
-            System.out.println("请输入你的密码: ");
-            String secret = br.readLine().trim();
-            ZhihuLogin login = new ZhihuLogin();
-            login.login(account, secret);
-            System.out.println(login.getProfile());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-    }
-
-    private String getProfile() {
-        //通过查看用户个人信息来判断是否已经登录
+    public String getProfile() {
         String url = "https://www.zhihu.com/settings/profile";
         String resp = HttpUtils.get(url, headers, httpContext);
         return resp;
@@ -95,7 +74,7 @@ public class ZhihuLogin {
         return null;
     }
 
-    private boolean login(String account, String secret) {
+    public boolean login(String account, String secret) {
         Pattern pattern = Pattern.compile("^1\\d{10}$");
         Matcher matcher = pattern.matcher(account);
 
@@ -117,17 +96,15 @@ public class ZhihuLogin {
             params.put("email", account);
         }
 
-        // 不使用验证码直接登录成功
+        params.put("captcha", getCaptcha());
         String resp = HttpUtils.post(postUrl, headers, params, httpContext);
+        System.out.println(resp);
         if (resp != null) {
-            System.out.println(resp);
-            return true;
+            Map respMap = JsonUtils.fromJson(resp, Map.class);
+            return ((Integer)respMap.get("r")) == 0;
         }
 
-        params.put("captcha", getCaptcha());
-        resp = HttpUtils.post(postUrl, headers, params, httpContext);
-        System.out.println(resp);
-        return true;
+        return false;
     }
 
 }
